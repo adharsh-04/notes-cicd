@@ -38,8 +38,6 @@ pipeline {
         stage('Build Frontend') {
             steps {
                 dir('frontend') {
-                    sh 'npm install'
-                    sh 'npm run build'
                     sh "docker build -t $DOCKER_USER/notes-frontend:latest ."
                 }
             }

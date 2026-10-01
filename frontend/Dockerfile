@@ -5,7 +5,7 @@ COPY . .
 RUN npm install
 RUN npm run build
 
-# Runtime stage (serving static files with nginx)
+# Runtime stage (serve with nginx)
 FROM nginx:alpine
 COPY --from=build /app/build /usr/share/nginx/html
 EXPOSE 80
