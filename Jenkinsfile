@@ -1,0 +1,43 @@
+pipeline {
+    agent any
+    environment {
+        DOCKERHUB_CREDENTIALS = credentials('dockerhub-creds')
+        DOCKER_USER = 'adharshsanda'
+    }
+    stages {
+        stage('Checkout') {
+            steps {
+                git branch: 'main', url: 'https://github.com/adharsh-04/notes-cicd.git'
+            }
+        }
+        stage('Build Backend') {
+            steps {
+                dir('backend/demo') {
+                    sh 'mvn clean package -DskipTests'
+                    sh "docker build -t $DOCKER_USER/notes-backend:latest ."
+                }
+            }
+        }
+        stage('Build Frontend') {
+            steps {
+                dir('frontend') {
+                    sh 'npm install'
+                    sh 'npm run build'
+                    sh "docker build -t $DOCKER_USER/notes-frontend:latest ."
+                }
+            }
+        }
+        stage('Push Images') {
+            steps {
+                sh "echo $DOCKERHUB_CREDENTIALS_PSW | docker login -u $DOCKER_USER --password-stdin"
+                sh "docker push $DOCKER_USER/notes-backend:latest"
+                sh "docker push $DOCKER_USER/notes-frontend:latest"
+            }
+        }
+        stage('Deploy to Minikube') {
+            steps {
+                sh 'kubectl apply -f k8s/'
+            }
+        }
+    }
+}

@@ -1,0 +1,35 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: notes-backend
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: notes-backend
+  template:
+    metadata:
+      labels:
+        app: notes-backend
+    spec:
+      containers:
+        - name: backend
+          image: adharshsanda/notes-backend:latest
+          ports:
+            - containerPort: 8080
+          env:
+            - name: SPRING_DATA_MONGODB_URI
+              value: mongodb://notes-mongo:27017/notesdb
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: notes-backend-service
+spec:
+  selector:
+    app: notes-backend
+  ports:
+    - protocol: TCP
+      port: 8081
+      targetPort: 8080
+  type: ClusterIP
