@@ -8,6 +8,13 @@ pipeline {
         DOCKER_USER = 'adharshsanda'
     }
     stages {
+        stage('Test Java') {
+            steps {
+                sh 'java -version'
+                sh 'echo $JAVA_HOME'
+            }
+        }
+
         stage('Checkout') {
             steps {
                 git branch: 'main', url: 'https://github.com/adharsh-04/notes-cicd.git'
