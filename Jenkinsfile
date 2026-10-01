@@ -15,6 +15,13 @@ pipeline {
                 sh 'echo $JAVA_HOME'
             }
         }
+        stage('Test Docker') {
+            steps {
+                sh 'docker --version'
+                sh 'where docker'
+            }
+        }
+
 
         stage('Checkout') {
             steps {
