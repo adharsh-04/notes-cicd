@@ -51,7 +51,7 @@ pipeline {
         }
         stage('Deploy to Minikube') {
             steps {
-                sh 'kubectl --kubeconfig=C:/ProgramData/Jenkins/.jenkins/.kube/config apply -f k8s/ --validate=false'
+                sh 'kubectl --kubeconfig=C:/Users/adhar/.kube/config apply -f k8s/ --validate=false'
             }
         }
     }
